@@ -26,4 +26,4 @@ jobs:
         with:
           context: ./app
           push: true
-          tags: ccilabs/case-mgmt:latest
+          tags: ghcr.io/ccilabs/case-mgmt:latest
