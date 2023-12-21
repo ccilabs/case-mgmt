@@ -18,7 +18,7 @@ export default withAuth(
   config({
     db: {
       provider: "postgresql",
-      url: process.env.POSTGRES_URL || "",
+      url: process.env.DATABASE_URL || "",
     },
     lists,
     session,
