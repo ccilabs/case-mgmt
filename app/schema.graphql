@@ -3,22 +3,19 @@
 
 type User {
   id: ID!
+  authId: String
   name: String
   email: String
-  password: PasswordState
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   createdAt: DateTime
-}
-
-type PasswordState {
-  isSet: Boolean!
 }
 
 scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
 
 input UserWhereUniqueInput {
   id: ID
+  authId: String
   email: String
 }
 
@@ -27,6 +24,7 @@ input UserWhereInput {
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
   id: IDFilter
+  authId: StringFilter
   name: StringFilter
   email: StringFilter
   posts: PostManyRelationFilter
@@ -97,6 +95,7 @@ input DateTimeNullableFilter {
 
 input UserOrderByInput {
   id: OrderDirection
+  authId: OrderDirection
   name: OrderDirection
   email: OrderDirection
   createdAt: OrderDirection
@@ -108,9 +107,9 @@ enum OrderDirection {
 }
 
 input UserUpdateInput {
+  authId: String
   name: String
   email: String
-  password: String
   posts: PostRelateToManyForUpdateInput
   createdAt: DateTime
 }
@@ -128,9 +127,9 @@ input UserUpdateArgs {
 }
 
 input UserCreateInput {
+  authId: String
   name: String
   email: String
-  password: String
   posts: PostRelateToManyForCreateInput
   createdAt: DateTime
 }
@@ -260,6 +259,469 @@ input TagCreateInput {
   posts: PostRelateToManyForCreateInput
 }
 
+type File {
+  id: ID!
+  name: String
+  altText: String
+  document: FileFieldOutput
+  createdAt: DateTime
+}
+
+type FileFieldOutput {
+  filename: String!
+  filesize: Int!
+  url: String!
+}
+
+input FileWhereUniqueInput {
+  id: ID
+}
+
+input FileWhereInput {
+  AND: [FileWhereInput!]
+  OR: [FileWhereInput!]
+  NOT: [FileWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  altText: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input FileOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  altText: OrderDirection
+  createdAt: OrderDirection
+}
+
+input FileUpdateInput {
+  name: String
+  altText: String
+  document: FileFieldInput
+  createdAt: DateTime
+}
+
+input FileFieldInput {
+  upload: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input FileUpdateArgs {
+  where: FileWhereUniqueInput!
+  data: FileUpdateInput!
+}
+
+input FileCreateInput {
+  name: String
+  altText: String
+  document: FileFieldInput
+  createdAt: DateTime
+}
+
+type Contact {
+  id: ID!
+  category: [ContactCategoryType!]
+  category_other: String
+  last_name: String
+  first_name: String
+  email: String
+  phone: String
+  indigenous_person: ContactIndigenousPersonType
+  attachments(where: FileWhereInput! = {}, orderBy: [FileOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FileWhereUniqueInput): [File!]
+  attachmentsCount(where: FileWhereInput! = {}): Int
+  createdAt: DateTime
+  communications(where: CommunicationWhereInput! = {}, orderBy: [CommunicationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommunicationWhereUniqueInput): [Communication!]
+  communicationsCount(where: CommunicationWhereInput! = {}): Int
+}
+
+enum ContactCategoryType {
+  PersonDisability
+  Family
+  ServiceProvider
+}
+
+enum ContactIndigenousPersonType {
+  yes
+  no
+}
+
+input ContactWhereUniqueInput {
+  id: ID
+}
+
+input ContactWhereInput {
+  AND: [ContactWhereInput!]
+  OR: [ContactWhereInput!]
+  NOT: [ContactWhereInput!]
+  id: IDFilter
+  category_other: StringFilter
+  last_name: StringFilter
+  first_name: StringFilter
+  email: StringFilter
+  phone: StringFilter
+  indigenous_person: ContactIndigenousPersonTypeNullableFilter
+  attachments: FileManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  communications: CommunicationManyRelationFilter
+}
+
+input ContactIndigenousPersonTypeNullableFilter {
+  equals: ContactIndigenousPersonType
+  in: [ContactIndigenousPersonType!]
+  notIn: [ContactIndigenousPersonType!]
+  not: ContactIndigenousPersonTypeNullableFilter
+}
+
+input FileManyRelationFilter {
+  every: FileWhereInput
+  some: FileWhereInput
+  none: FileWhereInput
+}
+
+input CommunicationManyRelationFilter {
+  every: CommunicationWhereInput
+  some: CommunicationWhereInput
+  none: CommunicationWhereInput
+}
+
+input ContactOrderByInput {
+  id: OrderDirection
+  category_other: OrderDirection
+  last_name: OrderDirection
+  first_name: OrderDirection
+  email: OrderDirection
+  phone: OrderDirection
+  indigenous_person: OrderDirection
+  createdAt: OrderDirection
+}
+
+input ContactUpdateInput {
+  category: [ContactCategoryType!]
+  category_other: String
+  last_name: String
+  first_name: String
+  email: String
+  phone: String
+  indigenous_person: ContactIndigenousPersonType
+  attachments: FileRelateToManyForUpdateInput
+  createdAt: DateTime
+  communications: CommunicationRelateToManyForUpdateInput
+}
+
+input FileRelateToManyForUpdateInput {
+  disconnect: [FileWhereUniqueInput!]
+  set: [FileWhereUniqueInput!]
+  create: [FileCreateInput!]
+  connect: [FileWhereUniqueInput!]
+}
+
+input CommunicationRelateToManyForUpdateInput {
+  disconnect: [CommunicationWhereUniqueInput!]
+  set: [CommunicationWhereUniqueInput!]
+  create: [CommunicationCreateInput!]
+  connect: [CommunicationWhereUniqueInput!]
+}
+
+input ContactUpdateArgs {
+  where: ContactWhereUniqueInput!
+  data: ContactUpdateInput!
+}
+
+input ContactCreateInput {
+  category: [ContactCategoryType!]
+  category_other: String
+  last_name: String
+  first_name: String
+  email: String
+  phone: String
+  indigenous_person: ContactIndigenousPersonType
+  attachments: FileRelateToManyForCreateInput
+  createdAt: DateTime
+  communications: CommunicationRelateToManyForCreateInput
+}
+
+input FileRelateToManyForCreateInput {
+  create: [FileCreateInput!]
+  connect: [FileWhereUniqueInput!]
+}
+
+input CommunicationRelateToManyForCreateInput {
+  create: [CommunicationCreateInput!]
+  connect: [CommunicationWhereUniqueInput!]
+}
+
+type Communication {
+  id: ID!
+  contact: Contact
+  individual: Contact
+  communication_date: CalendarDay
+  communication_type: CommunicationCommunicationTypeType
+  notes: Communication_notes_Document
+}
+
+scalar CalendarDay @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+enum CommunicationCommunicationTypeType {
+  PhoneCall
+  Email
+}
+
+type Communication_notes_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input CommunicationWhereUniqueInput {
+  id: ID
+}
+
+input CommunicationWhereInput {
+  AND: [CommunicationWhereInput!]
+  OR: [CommunicationWhereInput!]
+  NOT: [CommunicationWhereInput!]
+  id: IDFilter
+  contact: ContactWhereInput
+  individual: ContactWhereInput
+  communication_date: CalendarDayNullableFilter
+  communication_type: CommunicationCommunicationTypeTypeNullableFilter
+}
+
+input CalendarDayNullableFilter {
+  equals: CalendarDay
+  in: [CalendarDay!]
+  notIn: [CalendarDay!]
+  lt: CalendarDay
+  lte: CalendarDay
+  gt: CalendarDay
+  gte: CalendarDay
+  not: CalendarDayNullableFilter
+}
+
+input CommunicationCommunicationTypeTypeNullableFilter {
+  equals: CommunicationCommunicationTypeType
+  in: [CommunicationCommunicationTypeType!]
+  notIn: [CommunicationCommunicationTypeType!]
+  not: CommunicationCommunicationTypeTypeNullableFilter
+}
+
+input CommunicationOrderByInput {
+  id: OrderDirection
+  communication_date: OrderDirection
+  communication_type: OrderDirection
+}
+
+input CommunicationUpdateInput {
+  contact: ContactRelateToOneForUpdateInput
+  individual: ContactRelateToOneForUpdateInput
+  communication_date: CalendarDay
+  communication_type: CommunicationCommunicationTypeType
+  notes: JSON
+}
+
+input ContactRelateToOneForUpdateInput {
+  create: ContactCreateInput
+  connect: ContactWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CommunicationUpdateArgs {
+  where: CommunicationWhereUniqueInput!
+  data: CommunicationUpdateInput!
+}
+
+input CommunicationCreateInput {
+  contact: ContactRelateToOneForCreateInput
+  individual: ContactRelateToOneForCreateInput
+  communication_date: CalendarDay
+  communication_type: CommunicationCommunicationTypeType
+  notes: JSON
+}
+
+input ContactRelateToOneForCreateInput {
+  create: ContactCreateInput
+  connect: ContactWhereUniqueInput
+}
+
+type Case {
+  id: ID!
+  isActive: Boolean
+  case_number: Int
+  geographic_area: String
+  issues: [String!]
+  rating: Int
+  feedback: String
+  action_taken_date: CalendarDay
+  date_closed: DateTime
+  attachments(where: FileWhereInput! = {}, orderBy: [FileOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FileWhereUniqueInput): [File!]
+  attachmentsCount(where: FileWhereInput! = {}): Int
+  notes: Case_notes_Document
+}
+
+type Case_notes_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input CaseWhereUniqueInput {
+  id: ID
+}
+
+input CaseWhereInput {
+  AND: [CaseWhereInput!]
+  OR: [CaseWhereInput!]
+  NOT: [CaseWhereInput!]
+  id: IDFilter
+  case_number: IntFilter
+  geographic_area: StringNullableFilter
+  rating: IntNullableFilter
+  action_taken_date: CalendarDayNullableFilter
+  date_closed: DateTimeNullableFilter
+  attachments: FileManyRelationFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
+input CaseOrderByInput {
+  id: OrderDirection
+  case_number: OrderDirection
+  geographic_area: OrderDirection
+  rating: OrderDirection
+  feedback: OrderDirection
+  action_taken_date: OrderDirection
+  date_closed: OrderDirection
+}
+
+input CaseUpdateInput {
+  case_number: Int
+  geographic_area: String
+  issues: [String!]
+  rating: Int
+  feedback: String
+  action_taken_date: CalendarDay
+  date_closed: DateTime
+  attachments: FileRelateToManyForUpdateInput
+  notes: JSON
+}
+
+input CaseUpdateArgs {
+  where: CaseWhereUniqueInput!
+  data: CaseUpdateInput!
+}
+
+input CaseCreateInput {
+  case_number: Int
+  geographic_area: String
+  issues: [String!]
+  rating: Int
+  feedback: String
+  action_taken_date: CalendarDay
+  date_closed: DateTime
+  attachments: FileRelateToManyForCreateInput
+  notes: JSON
+}
+
+type Engagement {
+  id: ID!
+  activity: EngagementActivityType
+  location: String
+  issues: [String!]
+  notes: Engagement_notes_Document
+  attachments(where: FileWhereInput! = {}, orderBy: [FileOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FileWhereUniqueInput): [File!]
+  attachmentsCount(where: FileWhereInput! = {}): Int
+}
+
+enum EngagementActivityType {
+  Meeting
+  Presentation
+}
+
+type Engagement_notes_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input EngagementWhereUniqueInput {
+  id: ID
+}
+
+input EngagementWhereInput {
+  AND: [EngagementWhereInput!]
+  OR: [EngagementWhereInput!]
+  NOT: [EngagementWhereInput!]
+  id: IDFilter
+  activity: EngagementActivityTypeNullableFilter
+  location: StringFilter
+  attachments: FileManyRelationFilter
+}
+
+input EngagementActivityTypeNullableFilter {
+  equals: EngagementActivityType
+  in: [EngagementActivityType!]
+  notIn: [EngagementActivityType!]
+  not: EngagementActivityTypeNullableFilter
+}
+
+input EngagementOrderByInput {
+  id: OrderDirection
+  activity: OrderDirection
+  location: OrderDirection
+}
+
+input EngagementUpdateInput {
+  activity: EngagementActivityType
+  location: String
+  issues: [String!]
+  notes: JSON
+  attachments: FileRelateToManyForUpdateInput
+}
+
+input EngagementUpdateArgs {
+  where: EngagementWhereUniqueInput!
+  data: EngagementUpdateInput!
+}
+
+input EngagementCreateInput {
+  activity: EngagementActivityType
+  location: String
+  issues: [String!]
+  notes: JSON
+  attachments: FileRelateToManyForCreateInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -284,26 +746,37 @@ type Mutation {
   updateTags(data: [TagUpdateArgs!]!): [Tag]
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
+  createFile(data: FileCreateInput!): File
+  createFiles(data: [FileCreateInput!]!): [File]
+  updateFile(where: FileWhereUniqueInput!, data: FileUpdateInput!): File
+  updateFiles(data: [FileUpdateArgs!]!): [File]
+  deleteFile(where: FileWhereUniqueInput!): File
+  deleteFiles(where: [FileWhereUniqueInput!]!): [File]
+  createContact(data: ContactCreateInput!): Contact
+  createContacts(data: [ContactCreateInput!]!): [Contact]
+  updateContact(where: ContactWhereUniqueInput!, data: ContactUpdateInput!): Contact
+  updateContacts(data: [ContactUpdateArgs!]!): [Contact]
+  deleteContact(where: ContactWhereUniqueInput!): Contact
+  deleteContacts(where: [ContactWhereUniqueInput!]!): [Contact]
+  createCommunication(data: CommunicationCreateInput!): Communication
+  createCommunications(data: [CommunicationCreateInput!]!): [Communication]
+  updateCommunication(where: CommunicationWhereUniqueInput!, data: CommunicationUpdateInput!): Communication
+  updateCommunications(data: [CommunicationUpdateArgs!]!): [Communication]
+  deleteCommunication(where: CommunicationWhereUniqueInput!): Communication
+  deleteCommunications(where: [CommunicationWhereUniqueInput!]!): [Communication]
+  createCase(data: CaseCreateInput!): Case
+  createCases(data: [CaseCreateInput!]!): [Case]
+  updateCase(where: CaseWhereUniqueInput!, data: CaseUpdateInput!): Case
+  updateCases(data: [CaseUpdateArgs!]!): [Case]
+  deleteCase(where: CaseWhereUniqueInput!): Case
+  deleteCases(where: [CaseWhereUniqueInput!]!): [Case]
+  createEngagement(data: EngagementCreateInput!): Engagement
+  createEngagements(data: [EngagementCreateInput!]!): [Engagement]
+  updateEngagement(where: EngagementWhereUniqueInput!, data: EngagementUpdateInput!): Engagement
+  updateEngagements(data: [EngagementUpdateArgs!]!): [Engagement]
+  deleteEngagement(where: EngagementWhereUniqueInput!): Engagement
+  deleteEngagements(where: [EngagementWhereUniqueInput!]!): [Engagement]
   endSession: Boolean!
-  authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
-  createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
-}
-
-union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
-
-type UserAuthenticationWithPasswordSuccess {
-  sessionToken: String!
-  item: User!
-}
-
-type UserAuthenticationWithPasswordFailure {
-  message: String!
-}
-
-input CreateInitialUserInput {
-  name: String
-  email: String
-  password: String
 }
 
 type Query {
@@ -316,11 +789,30 @@ type Query {
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int
+  files(where: FileWhereInput! = {}, orderBy: [FileOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FileWhereUniqueInput): [File!]
+  file(where: FileWhereUniqueInput!): File
+  filesCount(where: FileWhereInput! = {}): Int
+  contacts(where: ContactWhereInput! = {}, orderBy: [ContactOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ContactWhereUniqueInput): [Contact!]
+  contact(where: ContactWhereUniqueInput!): Contact
+  contactsCount(where: ContactWhereInput! = {}): Int
+  communications(where: CommunicationWhereInput! = {}, orderBy: [CommunicationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommunicationWhereUniqueInput): [Communication!]
+  communication(where: CommunicationWhereUniqueInput!): Communication
+  communicationsCount(where: CommunicationWhereInput! = {}): Int
+  cases(where: CaseWhereInput! = {}, orderBy: [CaseOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CaseWhereUniqueInput): [Case!]
+  case(where: CaseWhereUniqueInput!): Case
+  casesCount(where: CaseWhereInput! = {}): Int
+  engagements(where: EngagementWhereInput! = {}, orderBy: [EngagementOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EngagementWhereUniqueInput): [Engagement!]
+  engagement(where: EngagementWhereUniqueInput!): Engagement
+  engagementsCount(where: EngagementWhereInput! = {}): Int
   keystone: KeystoneMeta!
-  authenticatedItem: AuthenticatedItem
+  groupedPosts: Statistics
 }
 
-union AuthenticatedItem = User
+type Statistics {
+  draft: Int
+  published: Int
+  latest: Post
+}
 
 type KeystoneMeta {
   adminMeta: KeystoneAdminMeta!

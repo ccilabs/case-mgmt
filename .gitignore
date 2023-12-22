@@ -1,0 +1,6 @@
+node_modules
+app/.keystone/admin
+keystone.db*
+*.log
+*.tgz
+Chart.lock

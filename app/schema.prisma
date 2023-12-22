@@ -13,9 +13,9 @@ generator client {
 
 model User {
   id        String    @id @default(cuid())
+  authId    String    @unique @default("")
   name      String    @default("")
   email     String    @unique @default("")
-  password  String
   posts     Post[]    @relation("Post_author")
   createdAt DateTime? @default(now())
 }
@@ -35,4 +35,82 @@ model Tag {
   id    String @id @default(cuid())
   name  String @default("")
   posts Post[] @relation("Post_tags")
+}
+
+model File {
+  id                          String       @id @default(cuid())
+  name                        String       @default("")
+  altText                     String       @default("")
+  document_filesize           Int?
+  document_filename           String?
+  createdAt                   DateTime?    @default(now())
+  from_Contact_attachments    Contact[]    @relation("Contact_attachments")
+  from_Case_attachments       Case[]       @relation("Case_attachments")
+  from_Engagement_attachments Engagement[] @relation("Engagement_attachments")
+}
+
+model Contact {
+  id                            String                       @id @default(cuid())
+  category                      Json                         @default("[]")
+  category_other                String                       @default("")
+  last_name                     String                       @default("")
+  first_name                    String                       @default("")
+  email                         String                       @default("")
+  phone                         String                       @default("")
+  indigenous_person             ContactIndigenousPersonType?
+  attachments                   File[]                       @relation("Contact_attachments")
+  createdAt                     DateTime?                    @default(now())
+  communications                Communication[]              @relation("Communication_contact")
+  from_Communication_individual Communication[]              @relation("Communication_individual")
+}
+
+model Communication {
+  id                 String                              @id @default(cuid())
+  contact            Contact?                            @relation("Communication_contact", fields: [contactId], references: [id])
+  contactId          String?                             @map("contact")
+  individual         Contact?                            @relation("Communication_individual", fields: [individualId], references: [id])
+  individualId       String?                             @map("individual")
+  communication_date DateTime?                           @postgresql.Date
+  communication_type CommunicationCommunicationTypeType?
+  notes              Json                                @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+
+  @@index([contactId])
+  @@index([individualId])
+}
+
+model Case {
+  id                String    @id @default(cuid())
+  case_number       Int       @default(autoincrement())
+  geographic_area   String?
+  issues            Json      @default("[]")
+  rating            Int?
+  feedback          String?
+  action_taken_date DateTime? @postgresql.Date
+  date_closed       DateTime?
+  attachments       File[]    @relation("Case_attachments")
+  notes             Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+}
+
+model Engagement {
+  id          String                  @id @default(cuid())
+  activity    EngagementActivityType?
+  location    String                  @default("")
+  issues      Json                    @default("[]")
+  notes       Json                    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  attachments File[]                  @relation("Engagement_attachments")
+}
+
+enum ContactIndigenousPersonType {
+  yes
+  no
+}
+
+enum CommunicationCommunicationTypeType {
+  PhoneCall
+  Email
+}
+
+enum EngagementActivityType {
+  Meeting
+  Presentation
 }
