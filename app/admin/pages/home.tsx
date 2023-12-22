@@ -10,17 +10,40 @@ import { Box, Image, Badge } from "@chakra-ui/react";
 
 import { StarIcon } from "@chakra-ui/icons";
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from "@apollo/client";
+import { embedDashboard } from "@superset-ui/embedded-sdk";
+
+import { gql, useQuery } from "@keystone-6/core/admin-ui/apollo";
+
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+
+// https://github.com/keystonejs/keystone/blob/ba6261e3158c4a91c2bf6d888eaf9fcc4c30101b/packages/core/src/___internal-do-not-use-will-break-in-patch/admin-ui/pages/HomePage/index.tsx#L133
 
 const client = new ApolloClient({
   uri: "/api/graphql",
   cache: new InMemoryCache(),
 });
+
+function SupersetDashboard() {
+  const [data, setData] = useState("");
+  useEffect(() => {
+    async function init() {
+      embedDashboard({
+        id: "abc123", // given by the Superset embedding UI
+        supersetDomain: "http://superset.127.0.0.1.sslip.io",
+        mountPoint: document.getElementById("my-superset-container"), // any html element that can contain an iframe
+        fetchGuestToken: () => fetchGuestTokenFromBackend(),
+        dashboardUiConfig: {
+          // dashboard UI config: hideTitle, hideTab, hideChartControls, filters.visible, filters.expanded (optional)
+          hideTitle: true,
+          filters: {
+            expanded: true,
+          },
+        },
+      });
+    }
+    init();
+  }, []);
+}
 
 function AirbnbCard() {
   const property = {
@@ -34,24 +57,23 @@ function AirbnbCard() {
     rating: 4,
   };
 
-  const [data, setData] = useState("");
-
-  useEffect(() => {
-    async function aa() {
-      const users = await client.query({
-        query: gql`
-          query GetUsers {
-            users {
-              name
-            }
-          }
-        `,
-      });
-
-      setData(users);
-    }
-    aa();
-  }, []);
+  const { data, error } = useQuery(
+    gql`
+      query GetUsers {
+        users {
+          name
+          email
+        }
+      }
+    `,
+    { variables: {} }
+  );
+  if (error) {
+    return "Error...";
+  }
+  if (!data) {
+    return "Loading...";
+  }
 
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">

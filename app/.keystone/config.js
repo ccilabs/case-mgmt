@@ -397,6 +397,11 @@ var init_schema = __esm({
     init_user();
     lists = {
       User: (0, import_core4.list)(user_default),
+      File: (0, import_core4.list)(file_default),
+      Contact: (0, import_core4.list)(contact_default),
+      Communication: (0, import_core4.list)(communication_default),
+      Case: (0, import_core4.list)(case_default),
+      Engagement: (0, import_core4.list)(engagement_default)
       // Post: list({
       //   // WARNING
       //   //   for this starter project, anyone can create, query, update and delete anything
@@ -472,11 +477,6 @@ var init_schema = __esm({
       //     posts: relationship({ ref: "Post.tags", many: true }),
       //   },
       // }),
-      File: (0, import_core4.list)(file_default),
-      Contact: (0, import_core4.list)(contact_default),
-      Communication: (0, import_core4.list)(communication_default),
-      Case: (0, import_core4.list)(case_default),
-      Engagement: (0, import_core4.list)(engagement_default)
     };
     extendGraphqlSchema = import_core5.graphql.extend((base) => {
       const Statistics = import_core5.graphql.object()({

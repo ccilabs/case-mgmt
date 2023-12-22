@@ -6,6 +6,8 @@ import { lists, extendGraphqlSchema } from "./schema";
 import { type Session, nextAuthSessionStrategy } from "./session";
 import type { TypeInfo } from ".keystone/types";
 
+import { withAuth } from "./auth";
+
 export default config<TypeInfo<Session>>({
   db: {
     provider: "postgresql",

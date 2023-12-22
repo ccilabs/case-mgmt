@@ -19,6 +19,7 @@
     "@keystone-6/core": "^5.0.0",
     "@keystone-6/fields-document": "^7.0.0",
     "@opensaas/keystone-nextjs-auth": "^27.2.0",
+    "@superset-ui/embedded-sdk": "^0.1.0-alpha.10",
     "framer-motion": "^10.16.16",
     "graphql": "^16.8.1",
     "next-auth": "^4.24.5",

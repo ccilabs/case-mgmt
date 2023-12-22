@@ -38,6 +38,11 @@ import UserSchema from "./schemas/user";
 
 export const lists: Lists = {
   User: list(UserSchema),
+  File: list(FileSchema),
+  Contact: list(ContactSchema),
+  Communication: list(CommunicationSchema),
+  Case: list(CaseSchema),
+  Engagement: list(EngagementSchema),
 
   // Post: list({
   //   // WARNING
@@ -125,12 +130,6 @@ export const lists: Lists = {
   //     posts: relationship({ ref: "Post.tags", many: true }),
   //   },
   // }),
-
-  File: list(FileSchema),
-  Contact: list(ContactSchema),
-  Communication: list(CommunicationSchema),
-  Case: list(CaseSchema),
-  Engagement: list(EngagementSchema),
 };
 
 export const extendGraphqlSchema = graphql.extend((base) => {
