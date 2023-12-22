@@ -2,7 +2,7 @@ FROM node:18-alpine3.19
 WORKDIR /app
 
 COPY package.json .
-RUN yarn install --ignore-scripts
+RUN yarn install --ignore-scripts --network-timeout 100000
 
 COPY . .
 RUN yarn keystone build
