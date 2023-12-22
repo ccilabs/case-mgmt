@@ -65,7 +65,7 @@ var init_standardFields = __esm({
   }
 });
 
-// custom-fields/conditional/index.tsx
+// custom-fields/conditional/index.ts
 function feedback({
   isIndexed,
   dependency,
@@ -106,7 +106,7 @@ function feedback({
 }
 var import_types, import_core;
 var init_conditional = __esm({
-  "custom-fields/conditional/index.tsx"() {
+  "custom-fields/conditional/index.ts"() {
     "use strict";
     import_types = require("@keystone-6/core/types");
     import_core = require("@keystone-6/core");
