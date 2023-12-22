@@ -24,12 +24,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/ccilabs/case-mgmt
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: ./app
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/ccilabs/case-mgmt:latest
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
