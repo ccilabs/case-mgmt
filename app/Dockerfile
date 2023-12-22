@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY package.json .
 
-# --ignore-scripts
+# --ignore-scripts : "keystone build --no-ui --frozen" gets run
 # --ignore-engines : @azure/msal-node causing an issue (max node 18)
 RUN yarn install --ignore-scripts --ignore-engines --network-timeout 100000
 
