@@ -28,6 +28,13 @@ export default {
         },
       }),
     }),
+    status: select({
+      options: [
+        { label: "Open", value: "open" },
+        { label: "Closed", value: "closed" },
+      ],
+    }),
+
     case_number: integer({
       defaultValue: { kind: "autoincrement" },
       validation: {

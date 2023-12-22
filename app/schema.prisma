@@ -16,25 +16,7 @@ model User {
   authId    String    @unique @default("")
   name      String    @default("")
   email     String    @unique @default("")
-  posts     Post[]    @relation("Post_author")
   createdAt DateTime? @default(now())
-}
-
-model Post {
-  id       String  @id @default(cuid())
-  title    String  @default("")
-  content  Json    @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author   User?   @relation("Post_author", fields: [authorId], references: [id])
-  authorId String? @map("author")
-  tags     Tag[]   @relation("Post_tags")
-
-  @@index([authorId])
-}
-
-model Tag {
-  id    String @id @default(cuid())
-  name  String @default("")
-  posts Post[] @relation("Post_tags")
 }
 
 model File {
@@ -80,6 +62,7 @@ model Communication {
 
 model Case {
   id                String    @id @default(cuid())
+  status            String?
   case_number       Int       @default(autoincrement())
   geographic_area   String?
   issues            Json      @default("[]")

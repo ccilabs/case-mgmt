@@ -10,9 +10,9 @@ export function CustomNavigation({
 }: NavigationProps) {
   return (
     <NavigationContainer authenticatedItem={authenticatedItem}>
+      <NavItem href="/home">Home</NavItem>
       <NavItem href="/">Dashboard</NavItem>
       <ListNavItems lists={lists} />
-      <NavItem href="/custom-page">Custom Page</NavItem>
     </NavigationContainer>
   );
 }

@@ -135,6 +135,12 @@ var init_case = __esm({
             }
           })
         }),
+        status: (0, import_fields2.select)({
+          options: [
+            { label: "Open", value: "open" },
+            { label: "Closed", value: "closed" }
+          ]
+        }),
         case_number: (0, import_fields2.integer)({
           defaultValue: { kind: "autoincrement" },
           validation: {
@@ -366,7 +372,7 @@ var init_user = __esm({
         }),
         // we can use this field to see what Posts this User has authored
         //   more on that in the Post list below
-        posts: (0, import_fields7.relationship)({ ref: "Post.author", many: true }),
+        // posts: relationship({ ref: "Post.author", many: true }),
         createdAt: (0, import_fields7.timestamp)({
           // this sets the timestamp to Date.now() when the user is first created
           defaultValue: { kind: "now" }
@@ -377,15 +383,12 @@ var init_user = __esm({
 });
 
 // schema.ts
-var import_core4, import_access7, import_core5, import_fields8, import_fields_document2, lists, extendGraphqlSchema;
+var import_core4, import_core5, lists, extendGraphqlSchema;
 var init_schema = __esm({
   "schema.ts"() {
     "use strict";
     import_core4 = require("@keystone-6/core");
-    import_access7 = require("@keystone-6/core/access");
     import_core5 = require("@keystone-6/core");
-    import_fields8 = require("@keystone-6/core/fields");
-    import_fields_document2 = require("@keystone-6/fields-document");
     init_case();
     init_communication();
     init_contact();
@@ -394,81 +397,81 @@ var init_schema = __esm({
     init_user();
     lists = {
       User: (0, import_core4.list)(user_default),
-      Post: (0, import_core4.list)({
-        // WARNING
-        //   for this starter project, anyone can create, query, update and delete anything
-        //   if you want to prevent random people on the internet from accessing your data,
-        //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-        access: import_access7.allowAll,
-        // this is the fields for our Post list
-        fields: {
-          title: (0, import_fields8.text)({ validation: { isRequired: true } }),
-          // the document field can be used for making rich editable content
-          //   you can find out more at https://keystonejs.com/docs/guides/document-fields
-          content: (0, import_fields_document2.document)({
-            formatting: true,
-            layouts: [
-              [1, 1],
-              [1, 1, 1],
-              [2, 1],
-              [1, 2],
-              [1, 2, 1]
-            ],
-            links: true,
-            dividers: true
-          }),
-          // with this field, you can set a User as the author for a Post
-          author: (0, import_fields8.relationship)({
-            // we could have used 'User', but then the relationship would only be 1-way
-            ref: "User.posts",
-            // this is some customisations for changing how this will look in the AdminUI
-            ui: {
-              displayMode: "cards",
-              cardFields: ["name", "email"],
-              inlineEdit: { fields: ["name", "email"] },
-              linkToItem: true,
-              inlineConnect: true
-            },
-            // a Post can only have one author
-            //   this is the default, but we show it here for verbosity
-            many: false
-          }),
-          // with this field, you can add some Tags to Posts
-          tags: (0, import_fields8.relationship)({
-            // we could have used 'Tag', but then the relationship would only be 1-way
-            ref: "Tag.posts",
-            // a Post can have many Tags, not just one
-            many: true,
-            // this is some customisations for changing how this will look in the AdminUI
-            ui: {
-              displayMode: "cards",
-              cardFields: ["name"],
-              inlineEdit: { fields: ["name"] },
-              linkToItem: true,
-              inlineConnect: true,
-              inlineCreate: { fields: ["name"] }
-            }
-          })
-        }
-      }),
+      // Post: list({
+      //   // WARNING
+      //   //   for this starter project, anyone can create, query, update and delete anything
+      //   //   if you want to prevent random people on the internet from accessing your data,
+      //   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
+      //   access: allowAll,
+      //   // this is the fields for our Post list
+      //   fields: {
+      //     title: text({ validation: { isRequired: true } }),
+      //     // the document field can be used for making rich editable content
+      //     //   you can find out more at https://keystonejs.com/docs/guides/document-fields
+      //     content: document({
+      //       formatting: true,
+      //       layouts: [
+      //         [1, 1],
+      //         [1, 1, 1],
+      //         [2, 1],
+      //         [1, 2],
+      //         [1, 2, 1],
+      //       ],
+      //       links: true,
+      //       dividers: true,
+      //     }),
+      //     // with this field, you can set a User as the author for a Post
+      //     author: relationship({
+      //       // we could have used 'User', but then the relationship would only be 1-way
+      //       ref: "User.posts",
+      //       // this is some customisations for changing how this will look in the AdminUI
+      //       ui: {
+      //         displayMode: "cards",
+      //         cardFields: ["name", "email"],
+      //         inlineEdit: { fields: ["name", "email"] },
+      //         linkToItem: true,
+      //         inlineConnect: true,
+      //       },
+      //       // a Post can only have one author
+      //       //   this is the default, but we show it here for verbosity
+      //       many: false,
+      //     }),
+      //     // with this field, you can add some Tags to Posts
+      //     tags: relationship({
+      //       // we could have used 'Tag', but then the relationship would only be 1-way
+      //       ref: "Tag.posts",
+      //       // a Post can have many Tags, not just one
+      //       many: true,
+      //       // this is some customisations for changing how this will look in the AdminUI
+      //       ui: {
+      //         displayMode: "cards",
+      //         cardFields: ["name"],
+      //         inlineEdit: { fields: ["name"] },
+      //         linkToItem: true,
+      //         inlineConnect: true,
+      //         inlineCreate: { fields: ["name"] },
+      //       },
+      //     }),
+      //   },
+      // }),
       // this last list is our Tag list, it only has a name field for now
-      Tag: (0, import_core4.list)({
-        // WARNING
-        //   for this starter project, anyone can create, query, update and delete anything
-        //   if you want to prevent random people on the internet from accessing your data,
-        //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-        access: import_access7.allowAll,
-        // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
-        ui: {
-          isHidden: true
-        },
-        // this is the fields for our Tag list
-        fields: {
-          name: (0, import_fields8.text)(),
-          // this can be helpful to find out all the Posts associated with a Tag
-          posts: (0, import_fields8.relationship)({ ref: "Post.tags", many: true })
-        }
-      }),
+      // Tag: list({
+      //   // WARNING
+      //   //   for this starter project, anyone can create, query, update and delete anything
+      //   //   if you want to prevent random people on the internet from accessing your data,
+      //   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
+      //   access: allowAll,
+      //   // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
+      //   ui: {
+      //     isHidden: true,
+      //   },
+      //   // this is the fields for our Tag list
+      //   fields: {
+      //     name: text(),
+      //     // this can be helpful to find out all the Posts associated with a Tag
+      //     posts: relationship({ ref: "Post.tags", many: true }),
+      //   },
+      // }),
       File: (0, import_core4.list)(file_default),
       Contact: (0, import_core4.list)(contact_default),
       Communication: (0, import_core4.list)(communication_default),
@@ -482,7 +485,7 @@ var init_schema = __esm({
           draft: import_core5.graphql.field({
             type: import_core5.graphql.Int,
             resolve({ authorId }, args, context) {
-              return context.query.Post.count({
+              return context.query.User.count({
                 where: {
                   // status: { equals: "draft" },
                 }
@@ -492,7 +495,7 @@ var init_schema = __esm({
           published: import_core5.graphql.field({
             type: import_core5.graphql.Int,
             resolve({ authorId }, args, context) {
-              return context.query.Post.count({
+              return context.query.User.count({
                 where: {
                   // status: { equals: "published" },
                 }
@@ -500,9 +503,9 @@ var init_schema = __esm({
             }
           }),
           latest: import_core5.graphql.field({
-            type: base.object("Post"),
+            type: base.object("User"),
             async resolve({ authorId }, args, context) {
-              const [post] = await context.db.Post.findMany({
+              const [post] = await context.db.User.findMany({
                 take: 1,
                 orderBy: { publishDate: "desc" }
               });
@@ -680,13 +683,13 @@ var init_keystone = __esm({
         s3_storage: {
           kind: "s3",
           type: "file",
-          bucketName: "default",
-          region: "ca-west-1",
-          accessKeyId: "dJcmQCXNine11C0kYl9n",
-          secretAccessKey: "ulHeClzJRK6M5JP3DQisWOwQzbkcA4ulk3Tqr6CH",
-          proxied: { baseUrl: "/images-proxy" },
+          bucketName: process.env.S3_BUCKET || "",
+          endpoint: process.env.S3_ENDPOINT || "",
+          region: process.env.S3_REGION || "",
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
+          proxied: { baseUrl: "/files-proxy" },
           signed: { expiry: 5e3 },
-          endpoint: "http://192.168.1.72:9000/",
           forcePathStyle: true
         }
       },

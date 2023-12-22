@@ -35,7 +35,7 @@ export default {
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
-    posts: relationship({ ref: "Post.author", many: true }),
+    // posts: relationship({ ref: "Post.author", many: true }),
 
     createdAt: timestamp({
       // this sets the timestamp to Date.now() when the user is first created
