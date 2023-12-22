@@ -60,17 +60,17 @@ export default config<TypeInfo<Session>>({
       forcePathStyle: true,
     },
   },
-  server: {
-    extendExpressApp: (app, commonContext) => {
-      app.get("/api/contact", async (req, res) => {
-        const context = await commonContext.withRequest(req, res);
-        const contacts = await context.prisma.contact.groupBy({
-          by: ["category"],
-          _max: { email: true },
-          _count: { email: true, id: true },
-        });
-        res.json(contacts);
-      });
-    },
-  },
+  // server: {
+  //   extendExpressApp: (app, commonContext) => {
+  //     app.get("/api/contact", async (req, res) => {
+  //       const context = await commonContext.withRequest(req, res);
+  //       const contacts = await context.prisma.contact.groupBy({
+  //         by: ["category"],
+  //         _max: { email: true },
+  //         _count: { email: true, id: true },
+  //       });
+  //       res.json(contacts);
+  //     });
+  //   },
+  // },
 });
